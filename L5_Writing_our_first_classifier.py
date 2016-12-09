@@ -7,8 +7,38 @@ Created on Dec 7, 2016
 from sklearn import datasets
 from sklearn.cross_validation import train_test_split
 from sklearn import tree
-from sklearn.neighbors import KNeighborsClassifier
+#from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
+import random
+from scipy.spatial import distance
+
+def euc(a, b):
+    return distance.euclidean(a, b)
+
+class ScrappyKNN():
+    def fit(self, X_train, y_train):
+        self.X_train = X_train
+        self.y_train = y_train
+        #pass
+        
+    def predict(self, X_test):
+        predictions = []
+        for row in X_test:
+            #label = random.choice(self.y_train)
+            label = self.closest(row)
+            predictions.append(label)
+        return predictions
+        #pass
+        
+    def closest(self, row):
+        best_dist = euc(row, self.X_train[0])
+        best_index = 0
+        for i in range(1, len(self.X_train)):
+            dist = euc(row, self.X_train[i])
+            if dist < best_dist:
+                best_dist = dist
+                best_index = i
+        return self.y_train[best_index]
 
 if __name__ == '__main__':
     #pass
@@ -37,7 +67,9 @@ if __name__ == '__main__':
     #type1: tree classifier
     #my_classifier = tree.DecisionTreeClassifier()
     #type2: KNeighborsClassifier
-    my_classifier = KNeighborsClassifier()
+    #my_classifier = KNeighborsClassifier()
+    #type3: ScrappyKNN(), this is implemented by ourselves
+    my_classifier = ScrappyKNN()
     
     my_classifier.fit(X_train, y_train)
     
@@ -49,7 +81,7 @@ if __name__ == '__main__':
     print(accuracy_score(y_test, predictions))
     
     #take away:
-    #Learning: to use training data to adjust parameters of a model
-    #Neural network:a more sophisticated type of classifier, like decision tree or simple line
-    
+    #K neighbor Classifier
+    #pros: relatively simple
+    #cons: computational intensive, hard to represent relationships between features
     
