@@ -16,41 +16,42 @@ from scipy.spatial import distance
 def euc(a, b):
     return distance.euclidean(a, b)
 
+#our own classifier
 class ScrappyKNN():
     #description
-    # input the training data
+    #  input the training data
     #param
-    # X_train: a set of training data (fields), e.g. [X1, X2, X3, ...] where X is a list of fields [x1, x2, x3, x4 ...]
-    # y_train: corresponding label for each training data (fields)
+    #  X_train: a set of training data (fields), e.g. [X1, X2, X3, ...] where X is a list of fields [x1, x2, x3, x4 ...]
+    #  y_train: corresponding label for each training data (fields)
     def fit(self, X_train, y_train):
         self.X_train = X_train
         self.y_train = y_train
         #pass
     
     #description
-    # get the predictions for each test data
+    #  get the predictions for each test data
     #param
-    # X_test: a list of test data
+    #  X_test: a list of test data
     #return
-    # a list of predicted lables
+    #  a list of predicted lables
     def predict(self, X_test):
         predictions = []
         for row in X_test:
-            #label = random.choice(self.y_train)
+            #label = random.choice(self.y_train) #originally randomly select a label, which gives roughly 33% of accuracy (3 iris labels)
             label = self.closest(row)
             predictions.append(label)
         return predictions
         #pass
     
     #description
-    # Used to determine which label in training data (y_train) a test data (one of X_test) belongs to
-    # by finding the shortest distance between the desired test data and training data (X_train), 
-    # the label of the closest training data (one of X_train) is then the predicted result (label)
-    # i.e. if the test data is closer to label A than to label B, then we say most likely the test data is label A (linear separation)
+    #  Used to determine which label in training data (y_train) a test data (one of X_test) belongs to
+    #  by finding the shortest distance between the desired test data and training data (X_train), 
+    #  the label of the closest training data (one of X_train) is then the predicted result (label)
+    #  i.e. if the test data is closer to label A than to label B, then we say most likely the test data is label A (linear separation)
     #param
-    # row: one test data, which is a list of fields
+    #  row: one test data, which is a list of fields
     #return
-    # the predicted label of the test data
+    #  the predicted label of the test data
     def closest(self, row):
         #euc() finds the distance between: one set of test data, and one set of training data
         #start with 1st training data, assume it is the best (shortest) distance
