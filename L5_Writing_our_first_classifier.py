@@ -1,11 +1,13 @@
 '''
 Created on Dec 7, 2016
 
+Demonstrate how to write a classifer
+
 - training data
-  X_train: a list of training points. Each test point has multiple fields and a known label. 
+  X_train: a list of training points. Each training point has multiple features and a known label. 
   y_train: a list of labels corresponding to X_train
 - test data
-  X_test: a list of test points. Each test point has multiple fields and an unknown label (to be predicted)
+  X_test: a list of test points. Each test point has multiple features and an unknown label (to be predicted)
 
 @author: tfchu
 '''
@@ -23,13 +25,13 @@ def euc(a, b):
     return distance.euclidean(a, b)
 
 #our own classifier
-#we assumed K = 1, hence only find the one and the only closest training point
+#we assumed K = 1, hence just find the one and the only closest training point
 class ScrappyKNN():
     #description
     #  input the training data
     #param
-    #  X_train: training data (which is a list of training points, with multiple fields)
-    #  e.g. X_train = [X1, X2, X3, ...] where Xn is the training point with a list of fields [x1, x2, x3, x4 ...]
+    #  X_train: training data (which is a list of training points, with multiple features)
+    #  e.g. X_train = [X1, X2, X3, ...] where Xn is the training point with a list of features [x1, x2, x3, x4 ...]
     #  y_train: corresponding label for each training point
     def fit(self, X_train, y_train):
         self.X_train = X_train
@@ -79,14 +81,9 @@ if __name__ == '__main__':
     #1. load iris data set
     iris = datasets.load_iris()
     
-    #X: data (a set of fields like pedal height, width...)
-    #y: target (a set of labels, like setosa, ...)
-    #f(X) = y where f is the ideal function to convert the fields to a label
-    #e.g. f([ 5.1  3.5  1.4  0.2]) = 'Setosa'
-    #or in Python
-    #def classify(features):
-    #  logic
-    #  return label
+    #X: data, a list of features like pedal height, pedal width...
+    #y: target, a list of labels, like setosa, ...
+    #f(X) = y where f is the ideal function to convert the fields to a label, e.g. f([ 5.1  3.5  1.4  0.2]) = 'Setosa'
     X = iris.data
     y = iris.target
     
@@ -94,17 +91,16 @@ if __name__ == '__main__':
     #print(y)
     
     #2. split iris data set into training data and test data
-    #test data is to verify accuracy
+    #  test data is to verify accuracy
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5)
     
-    #3.1 train the classifier
-    #type1: tree classifier
+    #3. train the classifier
+    #  type1: tree classifier
     #my_classifier = tree.DecisionTreeClassifier()
-    #type2: KNeighborsClassifier
+    #  type2: KNeighborsClassifier
     #my_classifier = KNeighborsClassifier()
-    #type3: ScrappyKNN(), this is implemented by ourselves
+    #  type3: ScrappyKNN(), this is our own classifier
     my_classifier = ScrappyKNN()
-    
     my_classifier.fit(X_train, y_train)
     
     #4. make prediction on test data
@@ -115,8 +111,8 @@ if __name__ == '__main__':
     print(accuracy_score(y_test, predictions))
     
     #take away:
-    #K neighbor Classifier
-    #accuracy > 90% but is random, depending on what the training and test data are
-    #pros: relatively simple
-    #cons: computational intensive, hard to represent relationships between features
+    # K neighbor Classifier
+    # accuracy > 90% but can be different, depending on what the training and test data are
+    # pros: relatively simple
+    # cons: computational intensive, hard to represent relationships between features
     
