@@ -37,7 +37,7 @@ if __name__ == '__main__':
     #type1: tree classifier
     #my_classifier = tree.DecisionTreeClassifier()
     #type2: KNeighborsClassifier or K nearest neighbors where K >= 1
-    #If K > 1, then whichever label has the closest neighbor wins
+    #If K > 1, then whichever label has more closest neighbor wins, useful when there is a tie on both labels
     my_classifier = KNeighborsClassifier()
     
     my_classifier.fit(X_train, y_train)
