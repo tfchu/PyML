@@ -1,6 +1,12 @@
 '''
 Created on Dec 7, 2016
 
+- training data
+  X_train: a list of training points. Each test point has multiple fields and a known label. 
+  y_train: a list of labels corresponding to X_train
+- test data
+  X_test: a list of test points. Each test point has multiple fields and an unknown label (to be predicted)
+
 @author: tfchu
 '''
 
@@ -17,12 +23,14 @@ def euc(a, b):
     return distance.euclidean(a, b)
 
 #our own classifier
+#we assumed K = 1, hence only find the one and the only closest training point
 class ScrappyKNN():
     #description
     #  input the training data
     #param
-    #  X_train: a set of training data (fields), e.g. [X1, X2, X3, ...] where X is a list of fields [x1, x2, x3, x4 ...]
-    #  y_train: corresponding label for each training data (fields)
+    #  X_train: training data (which is a list of training points, with multiple fields)
+    #  e.g. X_train = [X1, X2, X3, ...] where Xn is the training point with a list of fields [x1, x2, x3, x4 ...]
+    #  y_train: corresponding label for each training point
     def fit(self, X_train, y_train):
         self.X_train = X_train
         self.y_train = y_train
@@ -31,7 +39,7 @@ class ScrappyKNN():
     #description
     #  get the predictions for each test data
     #param
-    #  X_test: a list of test data
+    #  X_test: test data (a list of test points)
     #return
     #  a list of predicted lables
     def predict(self, X_test):
@@ -44,14 +52,14 @@ class ScrappyKNN():
         #pass
     
     #description
-    #  Used to determine which label in training data (y_train) a test data (one of X_test) belongs to
-    #  by finding the shortest distance between the desired test data and training data (X_train), 
-    #  the label of the closest training data (one of X_train) is then the predicted result (label)
+    #  Used to determine which available label in training data (y_train) a test point (one of X_test) belongs to
+    #  by finding the shortest distance between the desired test point  and training data (X_train), 
+    #  the label of the closest training point (one of X_train) is then the predicted result (label)
     #  i.e. if the test data is closer to label A than to label B, then we say most likely the test data is label A (linear separation)
     #param
-    #  row: one test data, which is a list of fields
+    #  row: one test point, with a list of fields and unknown label
     #return
-    #  the predicted label of the test data
+    #  the predicted label of the test point
     def closest(self, row):
         #euc() finds the distance between: one set of test data, and one set of training data
         #start with 1st training data, assume it is the best (shortest) distance
