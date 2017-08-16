@@ -5,3 +5,6 @@
 3. https://www.coursera.org/learn/machine-learning/home/welcome
 4. https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC
 5. https://classroom.udacity.com/courses/ud730
+
+## Others
+1. https://buzzorange.com/techorange/2017/08/16/big-data-for-stock/
