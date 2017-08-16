@@ -8,3 +8,4 @@
 
 ## Others
 1. https://buzzorange.com/techorange/2017/08/16/big-data-for-stock/
+2. https://buzzorange.com/techorange/2017/08/16/how-to-act-like-an-ai-expert/
