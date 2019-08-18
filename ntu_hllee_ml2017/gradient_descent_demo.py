@@ -27,20 +27,19 @@ X, Y = np.meshgrid(x, y)        # [[-200, -199, ... -101] [-200, -199, ... -101]
 # where 
 # Z[0][0] = L(b=x[0], w=y[0]), Z[0][1] = L(b=x[1], w=y[0]), Z[0][2] = L(b=x[2], w=y[0]), ...
 # Z[1][0] = L(b=x[0], w=y[1]), Z[1][1] = L(b=x[1], w=y[1]), Z[1][2] = L(b=x[2], w=y[1]), ...
-# or Z[m][n] = L(b=x[n], w=y[m])
-for i in range(len(x)):         # b
-    for j in range(len(y)):     # w
+for i in range(len(x)):         # b (x-axis)
+    for j in range(len(y)):     # w (y-axis)
         b = x[i]
         w = y[j]
         #Z[j][i] = 0
         for n in range(len(x_data)):
-            Z[j][i] = Z[j][i] + (y_data[n] - b - w * x_data[n])**2
+            Z[j][i] = Z[j][i] + (y_data[n] - b - w * x_data[n])**2  # sweep y-axis first with value j, or z[j][i] 
             Z[j][i] = Z[j][i]/len(x_data)
 # end of b and w sweep
 
 # apply grandient descent to find the best (b, w)
 # ydata = b + w * xdata 
-b = -120    # initial b
+b = -120    # initial b, change b0, w0 and best b, w is still the same!!!
 w = -4      # initial w
 lr = 1      # learning rate, try 0.000001, 0.00001, ... 
 iteration = 100000
@@ -78,6 +77,7 @@ print(b, w)
 # plot b, w sweep
 plt.contourf(x, y, Z, 50, alpha=0.5, cmap=plt.get_cmap('jet'))
 # plot best (b, w) point, i.e. b, w at iteration 10K (last point)
+# solve it! (how to find this best point)
 plt.plot([-188.4], [2.67], 'x', ms=12, markeredgewidth=3, color='orange')
 # plot steps of gradient descent
 plt.plot(b_history, w_history, 'o-', ms=3, lw=1.5, color='black')
