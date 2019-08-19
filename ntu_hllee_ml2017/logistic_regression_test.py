@@ -2,12 +2,13 @@
 Four files for logistic regression
     with_b  with_alr    file                result  accuracy    iter(min_loss)  w                   b
 1   no      no          nob_noalr.py        bad
-2   no      yes         nob.py              good    65.09%      ~20000          [[-0.0154, 0.0244]] 0.6509
+2   no      yes         nob.py              good    65%         ~10000          [[-0.0154, 0.0244]] 0.6509
 3   yes     no          noalr.py            bad
-4   yes     yes         test.py (this file) good    65.09%      ~50000          [[-0.0085, 0.0341]] -1.2162
+4   yes     yes         test.py (this file) good    65% (77%)   ~10000          [[-0.0085, 0.0341]] -1.2162
 
 *b: bias
 *alr: adaptive learning rate
+*accuray: x (y), x with 2 features, y with all features
 '''
 import math
 import numpy as np
