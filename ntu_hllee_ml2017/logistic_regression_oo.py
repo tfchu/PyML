@@ -85,7 +85,7 @@ class Logistic_Regression():
         #w_grad = (predictions_t - labels_t).dot(features_t) / len(features_t)
         self.w_lr = self.w_lr + w_grad**2
         self.weights = self.weights - self.lr/np.sqrt(self.w_lr) * w_grad
-        # scalar
+        # 1 x 1: bias is acutally a scalar
         b_grad = np.sum((predictions_t - labels_t))
         #b_grad = np.sum((predictions_t - labels_t)) / len(features_t)
         self.b_lr = self.b_lr + b_grad**2
@@ -99,7 +99,7 @@ class Logistic_Regression():
         class1_cost = labels_t.dot(np.log(predictions_t.T))
         # (1 x 1) = (1 x n) * (n x 1)
         class2_cost = (1-labels_t).dot(np.log(1-predictions_t.T))
-        # (1 x 1)
+        # (1 x 1) matrix
         cost = -(class1_cost + class2_cost)
         #cost = -(class1_cost + class2_cost) / len(labels_t)
         return np.asscalar(cost)

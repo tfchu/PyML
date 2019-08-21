@@ -26,12 +26,8 @@ common covariance       59%
 Reference
 http://cs231n.github.io/python-numpy-tutorial/#numpy
 '''
-import random
 import numpy as np
 import matplotlib.pyplot as plt
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-import pandas as pd
 from scipy.stats import multivariate_normal
 
 # [attack, sp_atk]
@@ -77,103 +73,6 @@ mean_c1 = 0
 mean_c2 = 0
 covar_c1 = 0
 covar_c2 = 0
-
-def fake_features():
-    feature_list = list()
-    for i in range(50):
-        feature_list.append([float(random.randint(120, 181)), float(random.randint(120, 181))])
-    print(feature_list)
-    feature_list.clear()
-    for i in range(50):
-        feature_list.append([float(random.randint(20, 81)), float(random.randint(20, 81))])
-    print(feature_list)    
-
-def web_scraping():
-    url = 'http://localhost/pokemon_stat.html'
-    #url = 'https://pokemondb.net/pokedex/all'
-    html = urlopen(url)                         # http.client.HTTPResponse object
-    soup = BeautifulSoup(html, 'lxml')          # soup is the html code
-
-    list_rows = []
-    rows = soup.find_all('tr')
-    for row in rows:
-        td_list = row.find_all('td')
-        is_data = len(td_list)
-        if is_data:
-            str_cell = BeautifulSoup(str(td_list), 'lxml').get_text()
-        else:
-            str_cell = BeautifulSoup(str(row.find_all('th')), 'lxml').get_text()
-        list_rows.append(str_cell)
-
-    df = pd.DataFrame(list_rows)
-    df = df[0].str.split(',', expand=True)  # expand 1 column to multiple columns with splitting ','
-    #df[0] = df[0].str.strip('[')
-    #df[df.columns[-1]] = df[df.columns[-1]].str.strip(']')
-    df = df.rename(columns=df.iloc[0])      # set column name to name of 1st row
-    df = df.drop(df.index[0])               # remove first row
-    # remove extra space in header
-    df = df.rename(columns={'[#' : '#', ' Name': 'Name', ' Type': 'Type', ' Total': 'Total', ' HP': 'HP', ' Attack': 'Attack', ' Defense': 'Defense', ' Sp. Atk': 'Sp_Atk', ' Sp. Def': 'Sp_Def', ' Speed]': 'Speed'})
-    # strip unwanted characters
-    df['#'] = df['#'].str.strip('[')            # strip '['
-    df['Type'] = df['Type'].str.strip()         # strip whitespace
-    df['Speed'] = df['Speed'].str.strip(']')    # strip ']'
-    # type conversion
-    df['#'] = df['#'].astype(int)                           # '#' column to int (instead of string)
-    df['Total'] = df['Total'].astype(int)
-    df['HP'] = df['HP'].astype(int)
-    df['Attack'] = df['Attack'].astype(int)
-    df['Defense'] = df['Defense'].astype(int)
-    df['Sp_Atk'] = df['Sp_Atk'].astype(int)
-    df['Sp_Def'] = df['Sp_Def'].astype(int)
-    df['Speed'] = df['Speed'].astype(int)
-    #print(df.head(10))
-    print('total df row: {}, columns: {}'.format(len(df.index), len(df.columns)))
-    return df
-
-# print a list of Pokemon, each represented by features vector [attack, sp_atk]
-# use the print-out to set training and validation set
-# e.g. 
-# water: [[48, 50], [63, 65], ...]
-# normal: [[45, 35], [60, 50], ...]
-def get_features():
-    def get_features_of_a_type(type):
-        type_features = list()
-        df_type = df[df['Type'].str.contains(type)]
-        #df_type = df[df['Type'] == type]
-        print('{} df row: {}, columns: {}'.format(type, len(df_type.index), len(df_type.columns)))
-        atk_list = df_type['Attack'].tolist()
-        sp_atk_list = df_type['Sp_Atk'].tolist()
-        # more features
-        # def_list = df_type['Defense'].tolist()
-        # sp_def_list = df_type['Sp_Def'].tolist()
-        # spd_list = df_type['Speed'].tolist()
-
-        for i in range(len(df_type.index)): 
-            type_features.append([atk_list[i], sp_atk_list[i]])
-            # type_features.append([atk_list[i], sp_atk_list[i], def_list[i], sp_def_list[i], spd_list[i]])
-        print(type_features)
-        return atk_list, sp_atk_list
-
-    df = web_scraping()
-    df = df[df['#'] <= 400]             # <= 400 as training set, > 400 as validation set
-    x1, y1 = get_features_of_a_type('Water')
-    x2, y2 = get_features_of_a_type('Normal')
-
-    # fig, axs = plt.subplots(1, 2, sharex=True, sharey=True)
-    # axs[0].plot([x1], [y1], 'o', color='blue')
-    # axs[1].plot([x2], [y2], 'o', color='red')
-    # axs[0].set(xlabel='Attack', ylabel='Sp_Atk', title='WATER')
-    # axs[1].set(xlabel='Attack', ylabel='Sp_Atk', title='NORMAL')
-    # axs[0].grid(True)
-    # axs[1].grid(True)
-
-    # plt.plot([x1], [y1], 'o', color='blue')
-    # plt.plot([x2], [y2], 'o', color='red')
-    # plt.xlabel('Attack')
-    # plt.ylabel('Sp_Atk')
-    # plt.xlim(0, 200)
-    # plt.ylim(0, 200)
-    # plt.show()    
 
 def plot_raw_training_set():
     fig, axs = plt.subplots(1, 2, sharex=True, sharey=True)
@@ -239,28 +138,6 @@ def get_posterior(x, common_covar):
     #return np.asscalar(p_c2_x)      # [[p]] convert to scalar
     #return np.asscalar(p_x_c1)     # gaussian distribution
 
-def get_posterior_with_logistic_regression():
-    def sig(x):
-        return 1. / (1 + np.exp(-x))
-    D = 2
-    w = np.zeros((D, 1))
-    b = 0
-    lr = 1
-    iteration = 10
-
-    sum_w = np.zeros((D, 1))
-    sum_b = 0
-    for i in range(iteration):
-        for j in range(len(water_t)):
-            sum_w = sum_w + (1 - sig(w.T.dot(np.reshape(water_t[j], (D, 1))) + b)) * np.reshape(water_t[j], (D, 1))
-            sum_b = sum_b + (1 - np.asscalar(sig(w.T.dot(np.reshape(water_t[j], (D, 1))) + b)))
-
-        w = (w + lr * sum_w)/len(water_t)
-        b = (b + lr * sum_b)/len(water_t)
-        sum_w = np.zeros((D, 1))
-        sum_b = 0
-    print(w, b)
-
 # plot the contour of posterior probability (red has larger probability) and data set points in dots
 # data_set_type: 'training' or 'validation'
 # common_var: whether ot use common variance or not, default to False
@@ -321,7 +198,7 @@ def test_plot_validation_set(common_covar = False):
         if p >= 0.5:
             count = count + 1
     print('Accuracy: {0:.0%}'.format(count / len(validation_set)))
-    #plot_data_set('validation', common_covar)
+    plot_data_set('validation', common_covar)
 
 def test_multivariate_gaussian_contour():
     N = 100
@@ -348,13 +225,10 @@ def test_multivariate_gaussian_contour():
 # 2. use plot_training_set() to plot posterior contour and training data set
 # 3. use test_plot_validation_set() to test our model and plot posterior contour and validation data set
 def main():
-    #fake_features()
-    #get_features()
     #plot_raw_training_set()
     #plot_training_set(common_covar=False)
-    #test_plot_validation_set(common_covar=True)
+    test_plot_validation_set(common_covar=True)
     #test_multivariate_gaussian_contour()
-    get_posterior_with_logistic_regression() 
 
 if __name__ == '__main__':
     main()
