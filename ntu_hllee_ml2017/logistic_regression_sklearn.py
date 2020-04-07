@@ -1,7 +1,4 @@
-import math
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.special import expit as sigmoid
 import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -31,183 +28,41 @@ normal_v = np.array([[100, 60], [66, 44], [76, 54], [136, 54], [55, 42], [82, 64
 # water_v = np.array([[65, 60, 35, 30, 85], [105, 85, 55, 50, 115], [48, 57, 48, 62, 34], [83, 92, 68, 82, 39], [49, 49, 56, 61, 66], [69, 69, 76, 86, 91], [20, 60, 50, 120, 50], [65, 105, 107, 107, 86], [120, 150, 100, 120, 100], [80, 80, 80, 80, 80], [100, 100, 100, 100, 100], [55, 63, 45, 45, 45], [75, 83, 60, 60, 60], [100, 108, 85, 70, 70], [53, 53, 48, 48, 64], [98, 98, 63, 63, 101], [50, 50, 40, 40, 64], [65, 65, 55, 55, 69], [95, 85, 75, 75, 74], [92, 80, 65, 55, 98], [92, 80, 65, 55, 98], [78, 53, 103, 45, 22], [108, 83, 133, 65, 32], [44, 44, 50, 50, 55], [87, 87, 63, 63, 98], [40, 65, 50, 85, 40], [60, 85, 70, 105, 60], [75, 40, 80, 45, 65], [72, 129, 90, 90, 108], [72, 129, 90, 90, 108], [56, 62, 40, 44, 71], [63, 83, 52, 56, 97], [95, 103, 67, 71, 122], [145, 153, 67, 71, 132], [52, 39, 67, 56, 50], [105, 54, 115, 86, 68], [60, 60, 60, 60, 30], [53, 58, 62, 63, 44], [73, 120, 88, 89, 59], [110, 130, 120, 90, 70], [54, 66, 54, 56, 40], [69, 91, 69, 81, 50], [74, 126, 74, 116, 60], [20, 25, 20, 25, 40], [140, 140, 130, 135, 30], [53, 43, 62, 52, 45], [63, 53, 152, 142, 35], [40, 40, 52, 72, 27], [70, 50, 92, 132, 42], [35, 20, 40, 30, 80], [125, 60, 140, 90, 40], [60, 30, 130, 130, 5], [105, 70, 70, 70, 92], [75, 95, 115, 130, 85]])
 # normal_v = np.array([[100, 60, 66, 66, 115], [66, 44, 44, 56, 85], [76, 54, 84, 96, 105], [136, 54, 94, 96, 135], [55, 42, 42, 37, 85], [82, 64, 64, 59, 112], [5, 15, 5, 65, 30], [65, 92, 45, 42, 91], [85, 40, 40, 85, 5], [85, 80, 95, 95, 50], [80, 135, 70, 75, 90], [160, 80, 110, 110, 100], [120, 120, 120, 120, 120], [55, 35, 39, 39, 42], [85, 60, 69, 69, 77], [60, 25, 45, 45, 55], [80, 35, 65, 65, 60], [110, 45, 90, 90, 80], [55, 36, 50, 30, 43], [77, 50, 62, 42, 65], [115, 65, 80, 55, 93], [60, 60, 86, 86, 50], [60, 80, 126, 126, 50], [50, 40, 40, 40, 75], [95, 65, 60, 60, 115], [60, 40, 50, 50, 75], [100, 60, 70, 70, 95], [110, 40, 95, 95, 55], [83, 37, 50, 50, 60], [123, 57, 75, 75, 80], [77, 128, 77, 128, 90], [128, 77, 90, 77, 128], [36, 32, 38, 36, 57], [56, 50, 77, 77, 78], [50, 40, 43, 38, 62], [50, 73, 58, 54, 72], [68, 109, 72, 66, 106], [80, 65, 60, 90, 102], [38, 61, 33, 43, 70], [55, 109, 52, 94, 109], [75, 30, 30, 30, 65], [85, 40, 50, 50, 75], [120, 75, 75, 75, 60], [70, 30, 30, 30, 45], [110, 55, 60, 60, 45], [75, 45, 50, 50, 50], [125, 55, 80, 60, 60], [60, 90, 80, 110, 60], [95, 95, 95, 95, 59], [95, 95, 95, 95, 95], [115, 75, 65, 95, 65], [60, 135, 85, 91, 36]])
 
-features_t = np.concatenate((water_t, normal_t))
+features_t = np.concatenate((water_t, normal_t))    # n x i
 water_label_t = np.ones((89, 1))
 normal_label_t = np.zeros((65, 1))
 labels_t = np.concatenate((water_label_t, normal_label_t), axis = 0)  # n x 1
-features_v = np.concatenate((water_v, normal_v))
+features_v = np.concatenate((water_v, normal_v))    # n x i
 water_label_v = np.ones((54, 1))
 normal_label_v = np.zeros((52, 1))
 labels_v = np.concatenate((water_label_v, normal_label_v), axis = 0)  # n x 1
 
-# # fake features: 50 samples each
-# water_t = np.array([[161.0, 152.0], [180.0, 158.0], [157.0, 150.0], [120.0, 137.0], [140.0, 175.0], [143.0, 149.0], [140.0, 156.0], [120.0, 171.0], [126.0, 162.0], [158.0, 143.0], [161.0, 144.0], [175.0, 177.0], [169.0, 151.0], [120.0, 173.0], [172.0, 121.0], [150.0, 147.0], [125.0, 127.0], [156.0, 176.0], [148.0, 164.0], [149.0, 180.0], [120.0, 157.0], [174.0, 150.0], [163.0, 153.0], [176.0, 170.0], [178.0, 124.0], [179.0, 157.0], [138.0, 162.0], [179.0, 126.0], [127.0, 142.0], [161.0, 160.0], [145.0, 168.0], [163.0, 125.0], [155.0, 169.0], [161.0, 157.0], [169.0, 163.0], [136.0, 130.0], [173.0, 146.0], [133.0, 181.0], [135.0, 170.0], [138.0, 130.0], [148.0, 163.0], [162.0, 131.0], [142.0, 167.0], [134.0, 169.0], [140.0, 181.0], [130.0, 178.0], [135.0, 157.0], [181.0, 171.0], [132.0, 136.0], [168.0, 171.0]])
-# normal_t = np.array([[61.0, 34.0], [35.0, 72.0], [20.0, 68.0], [28.0, 43.0], [42.0, 51.0], [63.0, 57.0], [44.0, 33.0], [54.0, 67.0], [46.0, 47.0], [60.0, 45.0], [47.0, 70.0], [51.0, 73.0], [46.0, 66.0], [45.0, 51.0], [30.0, 56.0], [27.0, 70.0], [72.0, 29.0], [79.0, 42.0], [26.0, 75.0], [25.0, 50.0], [31.0, 70.0], [31.0, 59.0], [56.0, 48.0], [22.0, 77.0], [45.0, 65.0], [21.0, 36.0], [80.0, 47.0], [23.0, 65.0], [24.0, 57.0], [31.0, 29.0], [76.0, 38.0], [69.0, 81.0], [58.0, 76.0], [47.0, 39.0], [26.0, 55.0], [38.0, 56.0], [66.0, 20.0], [56.0, 65.0], [40.0, 72.0], [59.0, 48.0], [65.0, 20.0], [55.0, 37.0], [34.0, 49.0], [26.0, 21.0], [75.0, 80.0], [23.0, 53.0], [25.0, 38.0], [25.0, 29.0], [42.0, 35.0], [54.0, 64.0]])
-# features_t = np.concatenate((water_t, normal_t))
-# water_label_t = np.ones((1, 50))
-# normal_label_t = np.zeros((1, 50))
-# labels_t = np.concatenate((water_label_t, normal_label_t), axis = 1)  # 1 x n: np.array([[1, 1, 1, ... 0]])
-
-# water_v = np.array([[150, 150]])
-# normal_v = np.array([[50, 50]])
-# features_v = np.concatenate((water_v, normal_v))
-# water_label_v = np.ones((1, 1))
-# normal_label_v = np.zeros((1, 1))
-# labels_v = np.concatenate((water_label_v, normal_label_v), axis = 1)  # 1 x n: np.array([[1, 1, 1, ... 0]])
-
-# i features for each sample
-# n samples
-class Logistic_Regression():
-    def __init__(self):
-        self.D = len(features_t[0])     # number of features
-        #self.weights = np.array([[0, 0, 0, 0, 0]])
-        self.weights = np.zeros((self.D, 1))   # 1 x i, i.e. a weight for each feature
-        # scalar for bias, lr, iteration
-        self.bias = 0.
-        self.lr = 1.
-        self.w_lr = 1.
-        self.b_lr = 1.
-        self.iteration = 50000
-        self.cost_history = []
-
-    # model (sigmoid function)
-    # predict whether given sample(s) (described with features) is class 1 (>= 0.5) or class 2 (< 0.5)
-    # note. weights: i x 1
-    # features: 1 x i for 1 sample, or n x i for all samples
-    # return sigmoid(w.x + b) for each sample
-    #   if features is 1 x i, return 1 x 1, e.g. [[0.3]]
-    #   if features is n x i, return n x 1, e.g. [[0.3], [0.2], [0.5], ...]]
-    def predict(self, features):
-        # n x i dot i x 1 + scalar
-        #return sigmoid(features.dot(self.weights) + np.full((len(features), 1), self.bias))
-        return sigmoid(features.dot(self.weights) + self.bias)
-
-    # calculate cost function value for each training iteration
-    # return a scalar
-    def cost_function(self):
-        # n x 1 = predict(n x i)
-        predictions_t = self.predict(features_t)
-        # (1 x 1) = (n x 1).T dot (n x 1)
-        class1_cost = labels_t.T.dot(np.log(predictions_t))
-        # (1 x 1) = (n x 1).T dot (n x 1)
-        class2_cost = (1-labels_t).T.dot(np.log(1-predictions_t))
-        # (1 x 1) matrix
-        cost = -(class1_cost + class2_cost)
-        #cost = -(class1_cost + class2_cost) / len(labels_t)
-        return np.asscalar(cost)
-
-    # update weights and bias for each training iteration
-    # note. weights: i x 1, features: n x i, labels: n x 1
-    def update_weights_bias(self):
-        # n x 1
-        predictions_t = self.predict(features_t)
-        # i x 1 = (n x i).T dot (n x 1 - n x 1) 
-        w_grad = features_t.T.dot(predictions_t - labels_t)
-        #w_grad = features_t.T.dot(predictions_t - labels_t) / len(features_t)
-        self.w_lr = self.w_lr + w_grad**2
-        self.weights = self.weights - self.lr/np.sqrt(self.w_lr) * w_grad
-        # 1 x 1: bias is acutally a scalar
-        b_grad = np.sum((predictions_t - labels_t))
-        #b_grad = np.sum((predictions_t - labels_t)) / len(features_t)
-        self.b_lr = self.b_lr + b_grad**2
-        self.bias = self.bias - self.lr/np.sqrt(self.b_lr) * b_grad
-
-    # find the local minimum, i.e. best weights (i x 1) and bias (scalar)
-    def train(self):
-        for i in range(self.iteration):
-            self.update_weights_bias()
-            # Record cost value
-            cost = self.cost_function()
-            self.cost_history.append(cost)
-            # Log Progress
-            if i % 10000 == 1:
-                print("iter: "+str(i) + " cost: "+str(cost))
-        print('weights: {}, bias: {}'.format(self.weights, self.bias))
-
-    # find accuracy given validation data set
-    # print accuracy, e.g. 65%, and error list
-    def accuracy(self, print_errors = False):
-        # n x 1
-        predictions = self.predict(features_v)
-        # n x 1: class 1 is 1, class 2 is 0
-        # any value >= 0.5 is class 1, < 0.5 is class 2
-        predicted_labels = (predictions >= 0.5).astype(int)
-        # n x 1: 0: correct prediction (1-1, or 0-0), 1: wrong prediction (1-0 or 0-1)
-        diff = predicted_labels - labels_v
-        # 1 x n
-        self.mydiff = diff.T
-        print('My Accuracy: {0:.0%}'.format(np.count_nonzero(diff==0)/len(diff)))
-        if print_errors:
-            print('Error list:')
-            error_indexes = np.argwhere(diff != 0).T[0]
-            print(error_indexes)
-            for index in error_indexes:
-                print('{}: label {}, prediction {}'.format(features_v[index], int(labels_v[index][0]), predicted_labels[index][0]))
-
-    def sklearn_accuracy(self):
-        # fit(n x i, 1 x n)
-        clf = LogisticRegression(solver='lbfgs').fit(features_t, labels_t.T[0])
-        # 1 x n = predict(n x i)
-        predictions = clf.predict(features_v)
-        # 1 x n
-        diff = predictions - labels_v.T[0]
-        self.skdiff = diff
-        print('Sk Accuracy: {0:.0%}'.format(np.count_nonzero(diff==0)/len(diff)))
-    
-    def compare(self):
-        print('Diff list:')
-        # 1 x n
-        diff = self.mydiff - self.skdiff
-        for i in np.argwhere(diff != 0).T[1]:
-            print('{}: label {}, prediction (my - sk) {}'.format(features_v[i], int(labels_v[i][0]), diff[0][i]))
-
-    # plot prediction contour + validation data set only for 2 features (i = 2)
-    # plot cost vs iteration regardless of feature count 
-    def plot(self):
-        plt_num = 1
-        # cost plot
-        plt.figure(plt_num)
-        plt_num = plt_num + 1
-        plt.plot(np.arange(0, len(self.cost_history), 1), self.cost_history)
-        plt.grid()
-        plt.ylim([self.cost_history[-1] - 20, self.cost_history[-1] + 20])
-        plt.xlabel('iteration')
-        plt.ylabel('cost')
-        plt.title('Cost vs Iteration')  
-        
-        # contour plot
-        if self.D == 2:
-            x = np.linspace(0, 200, 50)        # attack
-            y = np.linspace(0, 200, 50)        # sp_atk
-            Z = np.zeros((len(y), len(x)))
-            X, Y = np.meshgrid(x, y)
-
-            for i in range(len(y)):
-                for j in range(len(x)):
-                    #print('x: {}, y: {}'.format(j, i))
-                    Z[i][j] = self.predict(np.array([[x[j], y[i]]]))
-            #print(Z[10])
-
-            fig, ax = plt.subplots()
-            fig = plt.figure(plt_num)
-            plt_num = plt_num + 1
-            ax.contourf(X, Y, Z, 50, alpha=0.5, cmap=plt.get_cmap('jet'))
-            CS = ax.contour(X, Y, Z, [0.5], colors='r')
-            ax.clabel(CS, inline=1, fontsize=12, manual=[(175, 75)])
-
-            ax.plot([water_v.T[0]], [water_v.T[1]], 'o', color='blue')
-            ax.plot([normal_v.T[0]], [normal_v.T[1]], 'o', color='red')
-            ax.set(xlabel = 'Attack', ylabel = 'Sp_Atk', title = 'Validation data set: water (blue), normal (red)')
-        
-        plt.show()
+features = np.concatenate((features_t, features_v), axis = 0)   # n x i
+labels = np.concatenate((labels_t, labels_v), axis = 0) # n x 1
 
 def main():
-    lr = Logistic_Regression()
-    lr.train()
-    lr.accuracy()
-    lr.sklearn_accuracy()
-    lr.compare()
-    # lr.plot()
+    #global features, labels
+    #normalized_range = sklearn.preprocessing.MinMaxScaler(feature_range=(-1, 1))
+    #labels = labels.T[0]
+    #features = normalized_range.fit_transform(features)
+    #features_train, features_test, labels_train, labels_test = train_test_split(features, labels, test_size=0.4)
+
+    # print(features_train)
+    # print(features_test)
+    # print(labels_train)
+    # print(labels_test)
+
+    # fit(n x i, 1 x n)
+    #clf = LogisticRegression().fit(features_train, labels_train)
+    #clf_score = clf.score(features_test, labels_test)
+    #print('Scikit score: {}'.format(clf_score))
+
+    clf = LogisticRegression().fit(features_t, labels_t.T[0])
+    predictions = clf.predict(features_v)
+    diff = predictions - labels_v.T[0]
+    print('Accuracy: {0:.0%}'.format(np.count_nonzero(diff==0)/len(diff)))
+    print(diff)
+    print(np.argwhere(diff != 0))
 
 if __name__ == '__main__':
     main()

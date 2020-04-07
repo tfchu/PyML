@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
 from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
 
 # y = f(x) = x
 def plot_x():
@@ -146,17 +147,17 @@ def plot_multivariate_gaussian():
     Z = F.pdf(pos)
 
     # Create a surface plot and projected filled contour plot under it.
-    # fig = plt.figure()
-    # ax = fig.gca(projection='3d')
-    # ax.plot_surface(X, Y, Z, rstride=3, cstride=3, linewidth=1, antialiased=True,
-    #                 cmap=cm.viridis)
+    fig = plt.figure()
+    #ax = fig.gca(projection='3d')
+    ax = Axes3D(fig)
+    ax.plot_surface(X, Y, Z, rstride=3, cstride=3, linewidth=1, antialiased=True, cmap=cm.viridis)
 
-    #cset = ax.contourf(X, Y, Z, zdir='z', offset=-0.15, cmap=cm.viridis)
-    plt.contourf(X, Y, Z, zdir='z', alpha=0.5, cmap=plt.get_cmap('jet'))
+    cset = ax.contourf(X, Y, Z, zdir='z', offset=-0.15, cmap=cm.viridis)
+    #plt.contourf(X, Y, Z, zdir='z', alpha=0.5, cmap=plt.get_cmap('jet'))
     # Adjust the limits, ticks and view angle
-    # ax.set_zlim(-0.15,0.2)
-    # ax.set_zticks(np.linspace(0,0.2,5))
-    # ax.view_init(27, -21)
+    ax.set_zlim(-0.15,0.2)
+    ax.set_zticks(np.linspace(0,0.2,5))
+    ax.view_init(27, -21)
 
     plt.show()
 
@@ -268,9 +269,9 @@ def main():
     #plot_taylor_series()
     #plot_gaussian()
     #plot_sigmoid()
-    #plot_multivariate_gaussian()
+    plot_multivariate_gaussian()
     #test_plot()
-    multiple_plots()
+    #multiple_plots()
     
 if __name__ == '__main__':
     main()

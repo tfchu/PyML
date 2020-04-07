@@ -71,13 +71,12 @@ normal_v = np.array([])
 
 # i: number of features
 # n: number of samples
-
 # get mean and covariance of a training set
-# training set: np.array([[x, x], [x, x], ...])
+# training set: n x i
 # return mean (scalar) and covariance (i x i) matrix
 def update_mean_covar(training_set):
     mean = np.sum(training_set, axis=0)/len(training_set)
-    # for 2-feature sample: 2 x 2 = (2 x n) dot (n x 2)
+    # i x i = (n x i - scalar).T dot (n x i - scalar)
     covar = (training_set - mean).T.dot(training_set - mean) / len(training_set)
     return mean, covar
 

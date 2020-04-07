@@ -29,17 +29,18 @@ weight: [89.0, 52.0, 54.0, 95.0, 11.0, 58.0, 58.0, 24.0, 11.0, 72.0]
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import csv
 
 # training data: feature 
 # x_data (n x i) matrix, label n x 1 matrix
-#x_data = np.array([[12.0], [13.0], [27.0], [54.0], [73.0], [96.0], [159.0], [170.0], [173.0], [197.0]])   # xcp
-x_data = np.array([[12., 77., 89.], [13., 69., 67.], [27., 95., 61.], [54., 16., 99.], [73., 90., 87.], [96., 39., 27.], [159., 40., 63.], [170., 97., 62.], [173., 72., 69.], [197., 20., 84.]])
+x_data = np.array([[12.0], [13.0], [27.0], [54.0], [73.0], [96.0], [159.0], [170.0], [173.0], [197.0]])   # xcp
+#x_data = np.array([[12., 77., 89.], [13., 69., 67.], [27., 95., 61.], [54., 16., 99.], [73., 90., 87.], [96., 39., 27.], [159., 40., 63.], [170., 97., 62.], [173., 72., 69.], [197., 20., 84.]])
 y_data = np.array([[48.0], [48.0], [63.0], [85.0], [102.0], [108.0], [113.0], [112.0], [110.0], [94.0]])  # y_cap
 
 # validation data
-#x_data_v = np.array([[15.0], [40.0], [59.0], [66.0], [72.0], [96.0], [141.0], [167.0], [169.0], [196.0]])
-x_data_v = np.array([[15., 36., 89.], [40., 53., 52.], [59., 79., 54.], [66., 93., 95.], [72., 17., 11.], [96., 10., 58.], [141., 29., 58.], [167., 62., 24.], [169., 58., 11.], [196., 25., 72.]])
+x_data_v = np.array([[15.0], [40.0], [59.0], [66.0], [72.0], [96.0], [141.0], [167.0], [169.0], [196.0]])
+#x_data_v = np.array([[15., 36., 89.], [40., 53., 52.], [59., 79., 54.], [66., 93., 95.], [72., 17., 11.], [96., 10., 58.], [141., 29., 58.], [167., 62., 24.], [169., 58., 11.], [196., 25., 72.]])
 y_data_v = np.array([[50.0], [73.0], [90.0], [98.0], [94.0], [108.0], [116.0], [110.0], [108.0], [95.0]])
 
 # i-features, n-samples
@@ -133,7 +134,7 @@ class First_Order_Model():
             plt.ylabel('CP after evolution')
             plt.title('Actual vs Estimate')
 
-            plt.figure(3)
+            fig = plt.figure(3)
             x = np.linspace(-100, 100, 200) # bias b
             y = np.linspace(-100, 100, 200) # weight w
             Z = np.zeros((len(y), len(x)))  # Loss function 
@@ -146,7 +147,11 @@ class First_Order_Model():
                     self.w = np.array([[y[i]]])
                     self.b = x[j]
                     Z[i][j] = self.cost_function()
-            plt.contourf(X, Y, Z, 50, alpha=0.5, cmap=plt.get_cmap('jet'))
+            #plt.contourf(X, Y, Z, 50, alpha=0.5, cmap=plt.get_cmap('jet'))
+            ax = Axes3D(fig)
+            ax.plot_surface(X, Y, Z, rstride=3, cstride=3, linewidth=1, antialiased=True, cmap=plt.get_cmap('jet'))
+            cset = ax.contourf(X, Y, Z, zdir='z', offset=-0.15, cmap=plt.get_cmap('jet'))
+
             plt.plot(self.b_history, self.w_history, 'o-', ms=3, lw=1.5, color='black')
             plt.xlabel(r'$b$')
             plt.ylabel(r'$w$')
@@ -257,16 +262,16 @@ class Second_Order_Model():
     
 def main():
     # 1st order model: y = b + wx
-    # fom = First_Order_Model()
-    # fom.train()
-    # fom.accuracy()
-    # fom.plot()
+    fom = First_Order_Model()
+    fom.train()
+    fom.accuracy()
+    fom.plot()
 
     # 2nd order model: y = b + w1*x + w1*x^2
-    som = Second_Order_Model()
-    som.train()
-    som.accuracy()
-    som.plot()
+    # som = Second_Order_Model()
+    # som.train()
+    # som.accuracy()
+    # som.plot()
     
 if __name__ == '__main__':
     main()
