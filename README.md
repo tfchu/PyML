@@ -36,22 +36,13 @@ from google.colab import drive
 drive.mount('/content/drive/')
 ```
 
-- CPU/memory usage
-``` !cat /proc/cpuinfo ```
-``` !cat /proc/meminfo ```
-
-- list files
-```!ls "/content/drive/My Drive/"```
-
-- install keras
-``` !pip install -q keras ```
-
-- download a file 'Titanic.csv' to 'app'
-``` !wget https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/Titanic.csv -P "/content/drive/My Drive/app" ```
-
-- run a python file, e.g. upload mnist.py to app
-``` !python3 "/content/drive/My Drive/app/mnist_cnn.py" ```
-
-- clone a github repo. files with ext 'ipynb' can be opened/run in lolab
-``` !git clone https://github.com/wxs/keras-mnist-tutorial.git ```
-
+- Usages
+``` 
+!cat /proc/cpuinfo                  # CPU usage
+!cat /proc/meminfo                  # memory usage
+!ls "/content/drive/My Drive/"      # list files
+!pip install -q keras               # install keras
+!wget https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/datasets/Titanic.csv -P "/content/drive/My Drive/app"   # download file
+!python3 "/content/drive/My Drive/app/mnist_cnn.py"             # run python file
+!git clone https://github.com/wxs/keras-mnist-tutorial.git      # clone a github repo
+```
