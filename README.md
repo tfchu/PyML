@@ -17,7 +17,7 @@
     - https://colab.research.google.com/notebooks/intro.ipynb
 
 - GPU selection
-Edit > Notebook settings > Hardware accelerator, select GPU
+    - Edit > Notebook settings > Hardware accelerator, select GPU
 ```
 # check if CPU or GPU is used
 import tensorflow as tf
@@ -30,6 +30,16 @@ from tensorflow.python.client import device_lib
 device_lib.list_local_devices()
 ```
 
+- usage
+    - create an ```app``` folder, and add colab notebook under it
+    - install keras
+    - mount google drive
+    - change dir to ```app``` folder
+    - remove ```tb_logs``` folder
+    - load tensorboard notebook extension
+    - train a model, set tensorboard dir to ```tb_logs```
+    - visualize with tensorboard
+
 - mount google drive (copy the auth code)
 ```
 from google.colab import drive
@@ -41,16 +51,6 @@ drive.mount('/content/drive/')
 import os
 os.chdir("drive/app")
 ```
-
-- usage
-    - create an ```app``` folder, and add colab notebook under it
-    - install keras
-    - mount google drive
-    - change dir to ```app``` folder
-    - remove ```tb_logs``` folder
-    - load tensorboard notebook extension
-    - train a model, set tensorboard dir to ```tb_logs```
-    - visualize with tensorboard
 
 - tensorboard: https://www.tensorflow.org/tensorboard/get_started
 ```
