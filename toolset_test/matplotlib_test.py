@@ -3,6 +3,21 @@
 (TBD) https://towardsdatascience.com/simple-example-of-2d-density-plots-in-python-83b83b934f67
 (TBD) https://scipython.com/blog/visualizing-the-bivariate-gaussian-distribution/
 (TBD) https://towardsdatascience.com/what-is-a-positive-definite-matrix-181e24085abd
+
+Quick note
+figure: The top level container for all the plot elements.
+axes: contains most of the figure elements, e.g. add patch
+subplot: subplots inside a figure
+
+fig, ax = pyplot.subplots()     # Create a figure and a set of subplots, equal to below 2 lines
+
+fig = pyplot.figure()
+ax = fig.add_subplot()
+
+a = pyplot.axes()               # add new axes
+ax = pyplot.gca()               # get current axes
+
+pyplot.plot(...)                # Plot y versus x as lines and/or markers.
 '''
 
 import numpy as np
@@ -10,6 +25,9 @@ import matplotlib.pyplot as plt
 from scipy.stats import multivariate_normal
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.widgets import TextBox
+from matplotlib.widgets import RadioButtons
+
 
 # y = f(x) = x
 def plot_x():
@@ -171,6 +189,23 @@ def plot_sigmoid():
     plt.title('Sigmoid Function')
     plt.show()
 
+# rectified linear unit (RELU)
+def plot_relu():
+    z = np.arange(-2, 2, .1)
+    zero = np.zeros(len(z))
+    y = np.max([zero, z], axis=0)   # y = 0 if z < 0, else y = z
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(z, y)
+    ax.set_ylim([-2.0, 2.0])
+    ax.set_xlim([-2.0, 2.0])
+    ax.grid(True)
+    ax.set_xlabel('z')
+    ax.set_title('Rectified linear unit')
+
+    plt.show()
+
 # used to generate fake Pokemon CP value
 # y: actual CP after evolution
 # x: CP before evolution
@@ -263,15 +298,83 @@ def multiple_plots():
     plt.plot(t, s2)
     plt.show()
 
+# textbox
+def tb():
+    fig, ax = plt.subplots()
+    plt.subplots_adjust(bottom=0.2)
+    t = np.arange(-2.0, 2.0, 0.001)
+    s = t ** 2
+    initial_text = "t ** 2"
+    l, = plt.plot(t, s, lw=2)
+
+
+    def submit(text):
+        ydata = eval(text)
+        l.set_ydata(ydata)
+        ax.set_ylim(np.min(ydata), np.max(ydata))
+        plt.draw()
+
+    axbox = plt.axes([0.1, 0.05, 0.8, 0.075])
+    text_box = TextBox(axbox, 'Evaluate', initial=initial_text)
+    text_box.on_submit(submit)
+
+    plt.show()
+
+# radio button
+def rb():
+    t = np.arange(0.0, 2.0, 0.01)
+    s0 = np.sin(2*np.pi*t)
+    s1 = np.sin(4*np.pi*t)
+    s2 = np.sin(8*np.pi*t)
+
+    fig, ax = plt.subplots()
+    l, = ax.plot(t, s0, lw=2, color='red')
+    plt.subplots_adjust(left=0.3)
+
+    axcolor = 'lightgoldenrodyellow'
+    rax = plt.axes([0.05, 0.7, 0.15, 0.15], facecolor=axcolor)
+    radio = RadioButtons(rax, ('2 Hz', '4 Hz', '8 Hz'))
+
+
+    def hzfunc(label):
+        hzdict = {'2 Hz': s0, '4 Hz': s1, '8 Hz': s2}
+        ydata = hzdict[label]
+        l.set_ydata(ydata)
+        plt.draw()
+    radio.on_clicked(hzfunc)
+
+    rax = plt.axes([0.05, 0.4, 0.15, 0.15], facecolor=axcolor)
+    radio2 = RadioButtons(rax, ('red', 'blue', 'green'))
+
+
+    def colorfunc(label):
+        l.set_color(label)
+        plt.draw()
+    radio2.on_clicked(colorfunc)
+
+    rax = plt.axes([0.05, 0.1, 0.15, 0.15], facecolor=axcolor)
+    radio3 = RadioButtons(rax, ('-', '--', '-.', 'steps', ':'))
+
+
+    def stylefunc(label):
+        l.set_linestyle(label)
+        plt.draw()
+    radio3.on_clicked(stylefunc)
+
+    plt.show()
+
 def main():
     #print(plot())
     #plot_ax2_bx_c()
     #plot_taylor_series()
     #plot_gaussian()
     #plot_sigmoid()
-    plot_multivariate_gaussian()
+    #plot_multivariate_gaussian()
     #test_plot()
     #multiple_plots()
-    
+    #plot_relu()
+    #tb()
+    rb()
+
 if __name__ == '__main__':
     main()

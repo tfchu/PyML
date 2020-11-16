@@ -7,7 +7,7 @@ def load_show_pil():
     img = Image.open('koala.png')
     print(img.format)           # PNG
     print(img.size)             # (259, 194)
-    print(img.mode)             # RGBA
+    print(img.mode)             # RGBA (A: Alpha)
     img.show()
 
 def load_show_matplotlib():
@@ -17,9 +17,12 @@ def load_show_matplotlib():
     pyplot.imshow(img)
     pyplot.show()
 
-def img_to_numpy_array():
+def img_to_numpy_array_and_reverse():
     # image to numpy array
     img = Image.open('koala.png')
+    print(type(img))           # <class 'PIL.Image.Image'>
+    print(img.mode)            # RGBA
+    print(img.size)            # (259, 194)
     data = asarray(img)         # rgb value of each pixel from [[(0, 0), (0, 1), ...], [(1, 0), (1, 1), ...], ...]
                                 # or np.array(img)
     print(type(data))           # <class 'numpy.ndarray'>
@@ -30,6 +33,22 @@ def img_to_numpy_array():
     print(type(img2))           # <class 'PIL.Image.Image'>
     print(img2.mode)            # RGBA
     print(img2.size)            # (259, 194)
+    img2.show()
+
+def gray_img_to_numpy_array_and_reverse():
+    img = Image.open('handwriting_5.png').convert('L')       # conver to gray-scale (0 ~ 255)
+    print(img.mode)             # L
+    print(img.size)             # (28, 28)    
+
+    data = asarray(img)         
+    print(type(data))           # <class 'numpy.ndarray'>
+    print(data.shape)           # (28, 28) <-- RGBA has 1 extra dimension
+
+    img2 = Image.fromarray(data)
+    print(type(img2))           # <class 'PIL.Image.Image'>
+    print(img2.mode)            # l
+    print(img2.size)            # (28, 28)
+    img2.show()
 
 
 # RGB to Gray scale directly with PIL
@@ -46,7 +65,7 @@ def resize_pil():
     img.show()
 
 def main():
-    resize_pil()
+    gray_img_to_numpy_array_and_reverse()
 
 if __name__ == '__main__':
     main()
