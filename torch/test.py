@@ -59,7 +59,31 @@ print(X.view(N, C, 784).shape)
 print(X.view(-1, C, 784).shape) # automatically choose the 0th dimension with -1, only one dim can be -1
 
 # PyTorch operations support NumPy Broadcasting Semantics.
+# broadcast when dim does not exist, or dim = 1
+# final dim: larger dim of all tensors
 # original: reshape y to 1,3,1,1, and copy 5 times, then x + y
+'''
+x is 5 of these
+tensor([[[[0.],
+          [0.],
+          [0.],
+          [0.]]],
+        [[[0.],
+          [0.],
+          [0.],
+          [0.]]],
+        ...
+'''
 x=torch.empty(5,1,4,1)
 y=torch.empty(  3,1,1)
-print((x+y).size())
+print((x+y).size()) # [5, 3, 4, 1]
+
+
+a = torch.tensor(2.0, requires_grad=True) # we set requires_grad=True to let PyTorch know to keep the graph
+b = torch.tensor(1.0, requires_grad=True)
+c = a + b
+d = b + 1
+e = c * d
+print('c', c)
+print('d', d)
+print('e', e)
