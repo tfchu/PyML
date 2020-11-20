@@ -22,7 +22,7 @@ def get_loss(y_cap, y):
     return np.sum(np.square(y_cap - y)) / 2
 
 def get_output(X, W0, W1):
-    return sigmoid(sigmoid(X.dot(W0)).dot(W1))
+    return sigmoid(sigmoid(X.dot(W0)).dot(W1)).item(0)
 
 eta = 0.5
 iterations = 1000
@@ -68,7 +68,7 @@ for i in range(iterations):
 
 # test data
 X_test = np.array(((4.0, 3.0, 6.0, 1.0)))
-print(get_output(X_test, W0, W1))
+print("prediction: {}".format(get_output(X_test, W0, W1)))
 
 # plot
 X = np.arange(0, iterations, 1)
