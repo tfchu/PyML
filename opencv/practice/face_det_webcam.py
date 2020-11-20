@@ -1,7 +1,7 @@
 import cv2
 
 # real-time face detection with webcam
-faceCascade = cv2.CascadeClassifier("Resources/haarcascade_frontalface_default.xml")
+faceCascade = cv2.CascadeClassifier("../murtaza_workshop/Resources/haarcascade_frontalface_default.xml")
 cap = cv2.VideoCapture(0)      # 0: id of default webcam
 cap.set(3, 640)                # 3: id of width
 cap.set(4, 480)                # 4: id of height
