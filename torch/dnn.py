@@ -36,8 +36,14 @@ neural_network = nn.Sequential(
                             )
 loss_func = nn.MSELoss()                                                        # loss function
 optim = torch.optim.SGD(neural_network.parameters(), lr=step_size, momentum=m)  # optimizer
-# f = lambda epoch: 0.95
-# scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optim, lr_lambda=f)
+
+# lambda1 = lambda epoch: 0.999
+# scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optim, lr_lambda=lambda1)
+
+# lambda1 = lambda epoch: epoch // 30
+# lambda2 = lambda epoch: 0.95 ** epoch
+# scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer=optim, lr_lambda=lambda2)
+
 # print output every 10 epochs
 print('iter,\tloss')
 for i in range(n_epochs):
@@ -55,6 +61,7 @@ for i in range(n_epochs):
     # scheduler.step()
     # print loss
     if i % (n_epochs // 10) == 0:
+        print(optim.param_groups[0]['lr'])
         print('{},\t{:.2f}'.format(i, loss.item()))
 
 # X is between 0 ~ 1 (50 samples), generate X_grid from 0 ~ 1, 50 points

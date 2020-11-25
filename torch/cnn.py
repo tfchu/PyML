@@ -1,6 +1,7 @@
 '''
 download data, train model and save model
 '''
+import time, datetime
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -58,11 +59,11 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 net = Net()
 net.to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.005, momentum=0.9)     # change lr from 0.001 to 0.05
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
 
 # added adjust learning rate
-f = lambda epoch: 0.95
-scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optimizer, lr_lambda=f)
+# f = lambda epoch: 0.95
+# scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optimizer, lr_lambda=f)
 
 # train the network
 '''
@@ -80,7 +81,8 @@ scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optimizer, lr_la
 [2, 12000] loss: 1.274
 Finished Training
 '''
-for epoch in range(6):  # loop over the dataset multiple times, change from 2 to 6
+start = time.time()     # timer
+for epoch in range(16):  # loop over the dataset multiple times, change from 2 to 16
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
@@ -96,7 +98,7 @@ for epoch in range(6):  # loop over the dataset multiple times, change from 2 to
         loss.backward()
         optimizer.step()
 
-        scheduler.step()
+        # scheduler.step()
 
         # print statistics
         running_loss += loss.item()
@@ -104,6 +106,8 @@ for epoch in range(6):  # loop over the dataset multiple times, change from 2 to
             print('[%d, %5d] loss: %.3f' %
                   (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
+time_elapsed = datetime.timedelta(seconds = time.time() - start)
+print('training time', str(time_elapsed))
 
 PATH = 'cifar_net.pth'
 torch.save(net.state_dict(), PATH)
