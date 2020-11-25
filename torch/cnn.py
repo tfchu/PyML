@@ -23,7 +23,11 @@ download dataset
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
+'''
+CIFAR-10 dataset 
+60000 32x32 colour images in 10 classes, with 6000 images per class
+There are 50000 training images and 10000 test images
+'''
 # https://stackoverflow.com/questions/53974351/pytorch-getting-started-example-not-working
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=0)          # cause multiprocess issue if num_workers=2 (default)
