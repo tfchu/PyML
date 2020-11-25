@@ -62,7 +62,7 @@ optimizer = optim.SGD(net.parameters(), lr=0.005, momentum=0.9)     # change lr 
 
 # added adjust learning rate
 f = lambda epoch: 0.95
-scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optim, lr_lambda=f)
+scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optimizer, lr_lambda=f)
 
 # train the network
 '''
