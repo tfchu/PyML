@@ -86,9 +86,9 @@ start = time.time()     # timer
 for epoch in range(16):  # loop over the dataset multiple times, change from 2 to 16
 
     running_loss = 0.0
-    for i, data in enumerate(trainloader, 0):
+    for i, data in enumerate(trainloader, 0):                       # enumerate() adds index (i) to iterator trainloader, then loop
         # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data[0].to(device), data[1].to(device)     # inputs, labels = data for CPU version
+        inputs, labels = data[0].to(device), data[1].to(device)     # inputs, labels = data (for CPU version)
 
         # zero the parameter gradients
         optimizer.zero_grad()

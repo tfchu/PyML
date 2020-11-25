@@ -16,6 +16,8 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(120, 84)
         # self.fc4 = nn.Linear(84, 84)            # added
         self.fc3 = nn.Linear(84, 10)
+        self.dropout1 = nn.Dropout(0.5)
+        self.dropout2 = nn.Dropout(0.2)
 
     def forward(self, x):
         # x = self.pool(F.relu(self.conv1(x)))    # torch.Size([4, 6, 14, 14])
@@ -57,8 +59,12 @@ class Net(nn.Module):
         x = F.relu(x)                           # torch.Size([4, 16, 10, 10])
         x = self.pool(x)                        # torch.Size([4, 16, 5, 5])
         x = x.view(-1, 16 * 5 * 5)              # torch.Size([4, 400])
-        x = F.relu(self.fc1(x))                 # torch.Size([4, 120])
-        x = F.relu(self.fc2(x))                 # torch.Size([4, 84])
+        x = self.fc1(x)
+        x = self.dropout1(x)                    # added
+        x = F.relu(x)                           # torch.Size([4, 120])
+        x = self.fc2(x)
+        x = self.dropout2(x)                    # added
+        x = F.relu(x)                           # torch.Size([4, 84])
         # x = F.relu(self.fc4(x))                 # torch.Size([4, 84])
         x = self.fc3(x)                         # torch.Size([4, 10])
         return x
