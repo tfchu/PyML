@@ -13,6 +13,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from cnn_net import Net
 
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print('test on', device)
+
 '''
 show image
 '''
@@ -45,6 +48,7 @@ print('GroundTruth:\t', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 # load saved model
 net = Net()
 net.load_state_dict(torch.load(PATH))
+net.to(device)
 
 # get energies for the 10 classes
 # The higher the energy for a class, the more the network thinks that the image is of the particular class
@@ -65,7 +69,8 @@ correct = 0
 total = 0
 with torch.no_grad():
     for data in testloader:
-        images, labels = data                           # get image and label
+        # images, labels = data                           # get image and label
+        images, labels = data[0].to(device), data[1].to(device)     # get image and label
         outputs = net(images)                           # get predicted output (energies for the 10 classes)
         _, predicted = torch.max(outputs.data, 1)       # get label of the class with highest energy
         total += labels.size(0)                         # get total count (may have multiple labels per set)
@@ -80,7 +85,8 @@ class_correct = list(0. for i in range(10))
 class_total = list(0. for i in range(10))
 with torch.no_grad():
     for data in testloader:
-        images, labels = data
+        # images, labels = data
+        images, labels = data[0].to(device), data[1].to(device)
         outputs = net(images)
         _, predicted = torch.max(outputs, 1)
         c = (predicted == labels).squeeze()
