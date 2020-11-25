@@ -72,7 +72,7 @@ def check_performance(loader, setname):
     total = 0
     with torch.no_grad():
         for data in loader:
-            # images, labels = data                           # get image and label
+            # images, labels = data                           # get image and label (CPU case)
             images, labels = data[0].to(device), data[1].to(device) # get image and label
             outputs = net(images)                                   # get predicted output (energies for the 10 classes)
             _, predicted = torch.max(outputs.data, 1)               # get label of the class with highest energy

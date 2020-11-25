@@ -59,7 +59,8 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 net = Net()
 net.to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
+# optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
+optimizer = optim.Adam(net.parameters(), lr=0.001)
 
 # added adjust learning rate
 # f = lambda epoch: 0.95
