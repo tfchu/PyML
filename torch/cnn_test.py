@@ -29,6 +29,8 @@ transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
+trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=4, shuffle=True, num_workers=0) 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
 testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, num_workers=0)
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -65,36 +67,45 @@ print('Predicted:\t', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
 '''
 performance for entire data set
 '''
-correct = 0
-total = 0
-with torch.no_grad():
-    for data in testloader:
-        # images, labels = data                           # get image and label
-        images, labels = data[0].to(device), data[1].to(device)     # get image and label
-        outputs = net(images)                           # get predicted output (energies for the 10 classes)
-        _, predicted = torch.max(outputs.data, 1)       # get label of the class with highest energy
-        total += labels.size(0)                         # get total count (may have multiple labels per set)
-        correct += (predicted == labels).sum().item()   # get correct count
+def check_performance(loader, setname): 
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for data in loader:
+            # images, labels = data                           # get image and label
+            images, labels = data[0].to(device), data[1].to(device) # get image and label
+            outputs = net(images)                                   # get predicted output (energies for the 10 classes)
+            _, predicted = torch.max(outputs.data, 1)               # get label of the class with highest energy
+            total += labels.size(0)                                 # get total count (may have multiple labels per set)
+            correct += (predicted == labels).sum().item()           # get correct count
 
-print('Accuracy of the network on the 10000 test images: %d %%' % (100 * correct / total))
+    print('Accuracy of the network on the 10000 %s images: %d %%' % (setname, 100 * correct / total))
+
+check_performance(trainloader, 'training')
+check_performance(testloader, 'testing')
 
 '''
 check performance of each class
 '''
-class_correct = list(0. for i in range(10))
-class_total = list(0. for i in range(10))
-with torch.no_grad():
-    for data in testloader:
-        # images, labels = data
-        images, labels = data[0].to(device), data[1].to(device)
-        outputs = net(images)
-        _, predicted = torch.max(outputs, 1)
-        c = (predicted == labels).squeeze()
-        for i in range(4):
-            label = labels[i]
-            class_correct[label] += c[i].item()
-            class_total[label] += 1
+def check_performance_per_class(loader, setname):
+    class_correct = list(0. for i in range(10))
+    class_total = list(0. for i in range(10))
+    with torch.no_grad():
+        for data in loader:
+            # images, labels = data
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = net(images)
+            _, predicted = torch.max(outputs, 1)
+            c = (predicted == labels).squeeze()
+            for i in range(4):
+                label = labels[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
 
-# get accuracy of each class
-for i in range(10):
-    print('Accuracy of %5s : %2d %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
+    # get accuracy of each class
+    print('%s set' % (setname))
+    for i in range(10):
+        print('Accuracy of set %5s : %2d %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
+
+check_performance_per_class(trainloader, 'training')
+check_performance_per_class(testloader, 'testing')
