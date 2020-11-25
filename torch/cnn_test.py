@@ -56,7 +56,7 @@ _, predicted = torch.max(outputs, 1)
 print('Predicted:\t', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+# imshow(torchvision.utils.make_grid(images))
 
 '''
 performance for entire data set
