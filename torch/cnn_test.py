@@ -54,7 +54,7 @@ net.load_state_dict(torch.load(PATH))
 
 # get energies for the 10 classes
 # The higher the energy for a class, the more the network thinks that the image is of the particular class
-outputs = net(images)
+outputs = net(images.to(device))
 
 _, predicted = torch.max(outputs, 1)
 
