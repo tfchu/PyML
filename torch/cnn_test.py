@@ -49,8 +49,8 @@ print('GroundTruth:\t', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 # use our cnn to predict
 # load saved model
 net = Net()
-net.load_state_dict(torch.load(PATH))
 net.to(device)
+net.load_state_dict(torch.load(PATH))
 
 # get energies for the 10 classes
 # The higher the energy for a class, the more the network thinks that the image is of the particular class
