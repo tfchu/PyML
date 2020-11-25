@@ -14,7 +14,6 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(8, 16, 5)        # in_channels from 6 to 8
         self.fc1 = nn.Linear(16 * 5 * 5, 120)
         self.fc2 = nn.Linear(120, 84)
-        # self.fc4 = nn.Linear(84, 84)            # added
         self.fc3 = nn.Linear(84, 10)
         self.dropout1 = nn.Dropout(0.5)
         self.dropout2 = nn.Dropout(0.2)
@@ -65,6 +64,5 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = self.dropout2(x)                    # added
         x = F.relu(x)                           # torch.Size([4, 84])
-        # x = F.relu(self.fc4(x))                 # torch.Size([4, 84])
         x = self.fc3(x)                         # torch.Size([4, 10])
         return x

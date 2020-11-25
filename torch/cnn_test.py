@@ -50,6 +50,7 @@ print('GroundTruth:\t', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 # load saved model
 net = Net()
 net.to(device)
+net.eval()                  # evaluation mode
 net.load_state_dict(torch.load(PATH))
 
 # get energies for the 10 classes
