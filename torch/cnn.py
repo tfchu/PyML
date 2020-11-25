@@ -58,7 +58,11 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 net = Net()
 net.to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.05, momentum=0.9)     # change lr from 0.001 to 0.05
+optimizer = optim.SGD(net.parameters(), lr=0.005, momentum=0.9)     # change lr from 0.001 to 0.05
+
+# added adjust learning rate
+f = lambda epoch: 0.95
+scheduler = torch.optim.lr_scheduler.MultiplicativeLR(optimizer=optim, lr_lambda=f)
 
 # train the network
 '''
@@ -91,6 +95,8 @@ for epoch in range(6):  # loop over the dataset multiple times, change from 2 to
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
+
+        scheduler.step()
 
         # print statistics
         running_loss += loss.item()
