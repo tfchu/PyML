@@ -122,7 +122,8 @@ for epoch in range(16):                                 # loop over the dataset 
         # if i % 2000 == 1999:                                        # print every 2000 mini-batches (i = 1999, 3999, 5999, ...)
         if i % n == (n-1):
             print('[%5d, %5d] %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2000))
+                #   (epoch + 1, i + 1, running_loss / 2000))
+                  (epoch + 1, i + 1, running_loss / n))
             running_loss = 0.0
 
 # training time
