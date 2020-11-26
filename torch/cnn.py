@@ -28,6 +28,7 @@ CIFAR-10 dataset
 # constants
 NUM_SAMPLES = 50000
 NUM_BATCH_SIZE = 32
+NUM_EPOCHS = 32
 
 # image transformations chained with Compose()
 transform = transforms.Compose(
@@ -103,7 +104,7 @@ Finished Training
 start = time.time()                                     # timer
 print('[%5s, %5s] %s' % ('epoch', 'batch', 'loss'))     # statistics headers
 n = NUM_SAMPLES // NUM_BATCH_SIZE // 5
-for epoch in range(16):                                 # loop over the dataset multiple times, change from 2 to 16
+for epoch in range(NUM_EPOCHS):                                 # loop over the dataset multiple times, change from 2 to ?
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):                       # enumerate() adds index (i) to iterator trainloader starting 0
