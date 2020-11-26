@@ -17,8 +17,8 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(84, 10)
         # self.dropout1 = nn.Dropout(0.5)
         # self.dropout2 = nn.Dropout(0.2)
-        self.bn1 = nn.BatchNorm2d(8)
-        self.bn2 = nn.BatchNorm2d(16)
+        # self.bn1 = nn.BatchNorm2d(8)
+        # self.bn2 = nn.BatchNorm2d(16)
 
     def forward(self, x):
         # x = self.pool(F.relu(self.conv1(x)))    # torch.Size([4, 6, 14, 14])
@@ -54,11 +54,11 @@ class Net(nn.Module):
          | (4, 10): 4 images, each with 10 output (10 different image classes)
         '''
         x = self.conv1(x)                       # torch.Size([4, 6, 28, 28]), h_out = h_in - kernel + 1 = 32 - 5 + 1 = 28 for height and width
-        x = self.bn1(x)                         # added
+        # x = self.bn1(x)                         # added
         x = F.relu(x)                           # torch.Size([4, 6, 28, 28])
         x = self.pool(x)                        # torch.Size([4, 6, 14, 14]), h_out = h_in / kernel_size = 28 / 2 = 14 for height and width
         x = self.conv2(x)                       # torch.Size([4, 16, 10, 10]), h_out = h_in = kernel_size + 1 = 14 - 5 + 1 = 10
-        x = self.bn2(x)                         # added
+        # x = self.bn2(x)                         # added
         x = F.relu(x)                           # torch.Size([4, 16, 10, 10])
         x = self.pool(x)                        # torch.Size([4, 16, 5, 5])
         x = x.view(-1, 16 * 5 * 5)              # torch.Size([4, 400])

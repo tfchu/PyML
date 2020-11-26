@@ -28,7 +28,7 @@ CIFAR-10 dataset
 '''
 # constants
 NUM_SAMPLES = 50000
-NUM_BATCH_SIZE = 32
+NUM_BATCH_SIZE = 128
 NUM_EPOCHS = 32
 
 # image transformations chained with Compose()
@@ -76,8 +76,8 @@ net = Net()                                         # CNN
 net.to(device)                                      # to GPU if available
 net.train()                                         # set network to training mode
 criterion = nn.CrossEntropyLoss()                   # loss function
-# optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
-optimizer = optim.Adam(net.parameters(), lr=0.001)  # optimizer (update parameters)
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
+# optimizer = optim.Adam(net.parameters(), lr=0.001)  # optimizer (update parameters)
 
 # added adjust learning rate
 # f = lambda epoch: 0.95
