@@ -33,10 +33,10 @@ NUM_EPOCHS = 32
 
 # image transformations chained with Compose()
 transform = transforms.Compose([
-    transforms.ColorJitter(hue=.05, saturation=.05),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomVerticalFlip(),
-    transforms.RandomRotation(20, resample=PIL.Image.BILINEAR),
+    # transforms.ColorJitter(hue=.05, saturation=.05),
+    # transforms.RandomHorizontalFlip(),
+    # transforms.RandomVerticalFlip(),
+    # transforms.RandomRotation(20, resample=PIL.Image.BILINEAR),
     transforms.ToTensor(),                                      # PIL or numpy.ndarray to tensor
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))      # (mean[1], mean[2], mean[3]), [std[1], std[2], std[3]]). out = (in - mean) / std
     ])   
