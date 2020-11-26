@@ -9,6 +9,7 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.optim as optim
 import numpy as np
+import PIL
 import matplotlib.pyplot as plt
 from cnn_net import Net
 
@@ -31,9 +32,14 @@ NUM_BATCH_SIZE = 32
 NUM_EPOCHS = 32
 
 # image transformations chained with Compose()
-transform = transforms.Compose(
-    [transforms.ToTensor(),                                     # PIL or numpy.ndarray to tensor
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])   # (mean[1], mean[2], mean[3]), [std[1], std[2], std[3]]). out = (in - mean) / std
+transform = transforms.Compose([
+    transforms.ColorJitter(hue=.05, saturation=.05),
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomVerticalFlip(),
+    transforms.RandomRotation(20, resample=PIL.Image.BILINEAR),
+    transforms.ToTensor(),                                      # PIL or numpy.ndarray to tensor
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))      # (mean[1], mean[2], mean[3]), [std[1], std[2], std[3]]). out = (in - mean) / std
+    ])   
 
 # DataLoader issue: cause multiprocess issue if num_workers=2 or above
 # - https://stackoverflow.com/questions/53974351/pytorch-getting-started-example-not-working
@@ -44,24 +50,24 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=NUM_BATCH_SIZE, shu
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')              # 10 classes
 
-# '''
-# show image
-# '''
-# def imshow(img):
-#     img = img / 2 + 0.5     # unnormalize
-#     npimg = img.numpy()
-#     plt.imshow(np.transpose(npimg, (1, 2, 0)))
-#     plt.show()
+'''
+show image
+'''
+def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 # # get some random training images
-# dataiter = iter(trainloader)
-# images, labels = dataiter.next()
+dataiter = iter(trainloader)
+images, labels = dataiter.next()
 
 # # print labels
 # print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
-# # show images
-# imshow(torchvision.utils.make_grid(images))
+# show images
+imshow(torchvision.utils.make_grid(images))
 
 '''
 configure network
@@ -70,8 +76,8 @@ net = Net()                                         # CNN
 net.to(device)                                      # to GPU if available
 net.train()                                         # set network to training mode
 criterion = nn.CrossEntropyLoss()                   # loss function
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
-# optimizer = optim.Adam(net.parameters(), lr=0.001)  # optimizer (update parameters)
+# optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr from 0.001 to 0.05
+optimizer = optim.Adam(net.parameters(), lr=0.001)  # optimizer (update parameters)
 
 # added adjust learning rate
 # f = lambda epoch: 0.95
