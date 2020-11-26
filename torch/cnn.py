@@ -25,8 +25,10 @@ CIFAR-10 dataset
 - 60000 32x32 colour images in 10 classes, with 6000 images per class
 - There are 50000 training images and 10000 test images
 '''
+# constants
 NUM_SAMPLES = 50000
-NUM_BATCH_SIZE = 100
+NUM_BATCH_SIZE = 32
+
 # image transformations chained with Compose()
 transform = transforms.Compose(
     [transforms.ToTensor(),                                     # PIL or numpy.ndarray to tensor
@@ -100,7 +102,7 @@ Finished Training
 '''
 start = time.time()                                     # timer
 print('[%5s, %5s] %s' % ('epoch', 'batch', 'loss'))     # statistics headers
-n = NUM_SAMPLES // NUM_BATCH_SIZE // 10
+n = NUM_SAMPLES // NUM_BATCH_SIZE // 5
 for epoch in range(16):                                 # loop over the dataset multiple times, change from 2 to 16
 
     running_loss = 0.0
