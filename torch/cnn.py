@@ -25,6 +25,8 @@ CIFAR-10 dataset
 - 60000 32x32 colour images in 10 classes, with 6000 images per class
 - There are 50000 training images and 10000 test images
 '''
+NUM_SAMPLES = 50000
+NUM_BATCH_SIZE = 100
 # image transformations chained with Compose()
 transform = transforms.Compose(
     [transforms.ToTensor(),                                     # PIL or numpy.ndarray to tensor
@@ -33,9 +35,9 @@ transform = transforms.Compose(
 # DataLoader issue: cause multiprocess issue if num_workers=2 or above
 # - https://stackoverflow.com/questions/53974351/pytorch-getting-started-example-not-working
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=8, shuffle=True, num_workers=0)
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=NUM_BATCH_SIZE, shuffle=True, num_workers=0)
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
-testloader = torch.utils.data.DataLoader(testset, batch_size=8, shuffle=False, num_workers=0)
+testloader = torch.utils.data.DataLoader(testset, batch_size=NUM_BATCH_SIZE, shuffle=False, num_workers=0)
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')              # 10 classes
 
@@ -74,6 +76,12 @@ optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)     # change lr 
 
 ''' 
 train the network
+- feed 1 batch (e.g. 4 images) to network and get outputs
+- compute loss
+- compute gradient descent
+- update parameters
+- go back to 1st step until all batches are done
+- repeat number of epoch times
 
 output: 
 [1,  2000] loss: 2.180
@@ -92,6 +100,7 @@ Finished Training
 '''
 start = time.time()                                     # timer
 print('[%5s, %5s] %s' % ('epoch', 'batch', 'loss'))     # statistics headers
+n = NUM_SAMPLES // NUM_BATCH_SIZE // 10
 for epoch in range(16):                                 # loop over the dataset multiple times, change from 2 to 16
 
     running_loss = 0.0
@@ -110,7 +119,8 @@ for epoch in range(16):                                 # loop over the dataset 
 
         # print statistics
         running_loss += loss.item()
-        if i % 2000 == 1999:                                        # print every 2000 mini-batches (i = 1999, 3999, 5999, ...)
+        # if i % 2000 == 1999:                                        # print every 2000 mini-batches (i = 1999, 3999, 5999, ...)
+        if i % n == (n-1):
             print('[%5d, %5d] %.3f' %
                   (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
