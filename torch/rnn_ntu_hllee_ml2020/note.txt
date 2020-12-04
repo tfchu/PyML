@@ -1,0 +1,6 @@
+本次作業是要讓同學接觸 NLP 當中一個簡單的 task —— 語句分類（文本分類）
+給定一個語句，判斷他有沒有惡意（負面標 1，正面標 0）
+
+- run w2v.py, word to vector and save model as "w2v_all.model"
+- run main.py
+
