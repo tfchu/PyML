@@ -167,8 +167,6 @@ PATH = 'cifar_net.pth'
 torch.save(net.state_dict(), PATH)
 
 # save plot
-print(train_loss_list)
-print(test_loss_list)
 X = np.arange(NUM_EPOCHS)
 plt.plot(X, train_loss_list, label='training loss')
 plt.plot(X, test_loss_list, label='testing loss')
