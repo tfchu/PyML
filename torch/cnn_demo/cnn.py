@@ -110,6 +110,10 @@ Finished Training
 start = time.time()                                     # timer
 print('[%5s, %5s] %s' % ('epoch', 'batch', 'loss'))     # statistics headers
 n = NUM_SAMPLES // NUM_BATCH_SIZE // 5
+train_loss_list = []
+test_loss_list = []
+train_loss = 0
+test_loss = 0
 for epoch in range(NUM_EPOCHS):                                 # loop over the dataset multiple times, change from 2 to ?
 
     running_loss = 0.0
@@ -126,6 +130,9 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
 
         # scheduler.step()
 
+        # total train loss
+        train_loss = train_loss + loss.item() / NUM_BATCH_SIZE
+
         # print statistics
         running_loss += loss.item()
         # if i % 2000 == 1999:                                        # print every 2000 mini-batches (i = 1999, 3999, 5999, ...)
@@ -134,6 +141,18 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
                 #   (epoch + 1, i + 1, running_loss / 2000))
                   (epoch + 1, i + 1, running_loss / n))
             running_loss = 0.0
+    # training loss of n-th epoch
+    train_loss.append(train_loss)
+
+    # testing loss for n-th epoch
+    with torch.no_grad():
+        for data in testloader:
+            images, labels = data[0].to(device), data[1].to(device)
+            outputs = net(images) 
+            loss = criterion(outputs, labels)
+            # total test loss
+            test_loss = test_loss + loss.item() / NUM_BATCH_SIZE
+    test_loss.append(test_loss)
 
 # training time
 time_elapsed = datetime.timedelta(seconds = time.time() - start)
@@ -142,6 +161,16 @@ print('training time', str(time_elapsed))
 # save model
 PATH = 'cifar_net.pth'
 torch.save(net.state_dict(), PATH)
+
+# save plot
+X = np.arange(NUM_EPOCHS)
+plt.plot(X, train_loss_list, label='training loss')
+plt.plot(X, test_loss_list, label='testing loss')
+plt.legend()
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+#plt.show()
+plt.savefig('loss_vs_epoch.png')
 
 print('Finished Training')
 
