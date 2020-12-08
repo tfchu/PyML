@@ -131,7 +131,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
 
         # scheduler.step()
 
-        # total train loss
+        # total train loss (of all batches)
         train_loss += loss.item()
 
         # print statistics
@@ -143,7 +143,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
                   (epoch + 1, i + 1, running_loss / n))
             running_loss = 0.0
     # training loss of n-th epoch
-    train_loss_list.append(train_loss / NUM_SAMPLES)
+    train_loss_list.append(train_loss / NUM_SAMPLES * NUM_BATCH_SIZE)   # loss / number of batches = loss / (NUM_SAMPLES / NUM_BATCH_SIZE)
 
     # testing loss for n-th epoch
     with torch.no_grad():
@@ -153,7 +153,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
             loss = criterion(outputs, labels)
             # total test loss
             test_loss += loss.item()
-    test_loss_list.append(test_loss / NUM_SAMPLES)
+    test_loss_list.append(test_loss / NUM_SAMPLES * NUM_BATCH_SIZE)
 
     # zero losses
     train_loss = test_loss = 0

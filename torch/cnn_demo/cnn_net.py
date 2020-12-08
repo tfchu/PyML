@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 # model
-class Net(nn.Module):
+class Net1(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3, 8, 5)         # out_channels from 6 to 8
@@ -69,4 +69,44 @@ class Net(nn.Module):
         # x = self.dropout2(x)                    # added
         x = F.relu(x)                           # torch.Size([4, 84])
         x = self.fc3(x)                         # torch.Size([4, 10])
+        return x
+
+# VGG model (Visual Geometry Group, U of Oxford)
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(3, 32, (3, 3))
+        self.conv2 = nn.Conv2d(32, 32, (3, 3))
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv3 = nn.Conv2d(32, 64, (3, 3))
+        self.conv4 = nn.Conv2d(64, 64, (3, 3))
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv5 = nn.Conv2d(64, 128, (3, 3))
+        self.conv6 = nn.Conv2d(128, 128, (3, 3))        
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(128 * 1 * 1, 128)
+        self.fc2 = nn.Linear(128, 10)
+        # self.dropout1 = nn.Dropout(0.5)
+        # self.dropout2 = nn.Dropout(0.2)
+        # self.bn1 = nn.BatchNorm2d(8)
+        # self.bn2 = nn.BatchNorm2d(16)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))       # [batch_size, 32, 30, 30]
+        x = F.relu(self.conv2(x))       # [batch_size, 32, 28, 28]
+        x = self.pool(x)                # [batch_size, 32, 14, 14]
+
+        x = F.relu(self.conv3(x))       # [batch_size, 64, 12, 12]
+        x = F.relu(self.conv4(x))       # [batch_size, 64, 10, 10]
+        x = self.pool(x)                # [batch_size, 64, 5, 5]
+
+        x = F.relu(self.conv5(x))       # [batch_size, 128, 3, 3]
+        x = F.relu(self.conv6(x))       # [batch_size, 128, 1, 1]
+        x = self.pool(x)                # [batch_size, 128, 1, 1]
+
+        x = x.view(-1, 128 * 1 * 1)     # [batch_size, 128]
+        x = self.fc1(x)                 # [batch_size, 128]
+        x = F.relu(x)                   # [batch_size, 128]
+        x = self.fc2(x)                 # [batch_size, 10]
+
         return x
