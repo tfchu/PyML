@@ -68,7 +68,7 @@ images, labels = dataiter.next()
 # print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
 # show images
-imshow(torchvision.utils.make_grid(images))
+# imshow(torchvision.utils.make_grid(images))
 
 '''
 configure network
@@ -110,7 +110,7 @@ Finished Training
 '''
 start = time.time()                                     # timer
 print('[%5s, %5s] %s' % ('epoch', 'batch', 'loss'))     # statistics headers
-n = NUM_SAMPLES // NUM_BATCH_SIZE // 5
+n = NUM_SAMPLES // NUM_BATCH_SIZE // 5                  # 5 prints per epoch
 train_loss_list = []
 test_loss_list = []
 train_loss = 0
