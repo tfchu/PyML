@@ -30,6 +30,7 @@ CIFAR-10 dataset
 NUM_SAMPLES = 50000
 NUM_BATCH_SIZE = 128
 NUM_EPOCHS = 32
+print('Samples %d, Batch size %d, Epochs %d' % (NUM_SAMPLES, NUM_BATCH_SIZE, NUM_EPOCHS))
 
 # image transformations chained with Compose()
 transform = transforms.Compose([
@@ -142,7 +143,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
                   (epoch + 1, i + 1, running_loss / n))
             running_loss = 0.0
     # training loss of n-th epoch
-    train_loss.append(train_loss)
+    train_loss_list.append(train_loss)
 
     # testing loss for n-th epoch
     with torch.no_grad():
@@ -152,7 +153,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
             loss = criterion(outputs, labels)
             # total test loss
             test_loss = test_loss + loss.item() / NUM_BATCH_SIZE
-    test_loss.append(test_loss)
+    test_loss_list.append(test_loss)
 
 # training time
 time_elapsed = datetime.timedelta(seconds = time.time() - start)
