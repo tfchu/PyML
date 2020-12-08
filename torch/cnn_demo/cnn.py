@@ -132,7 +132,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
         # scheduler.step()
 
         # total train loss
-        train_loss = train_loss + loss.item() / NUM_BATCH_SIZE
+        train_loss += loss.item()
 
         # print statistics
         running_loss += loss.item()
@@ -143,7 +143,7 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
                   (epoch + 1, i + 1, running_loss / n))
             running_loss = 0.0
     # training loss of n-th epoch
-    train_loss_list.append(train_loss)
+    train_loss_list.append(train_loss / NUM_SAMPLES)
 
     # testing loss for n-th epoch
     with torch.no_grad():
@@ -152,8 +152,11 @@ for epoch in range(NUM_EPOCHS):                                 # loop over the 
             outputs = net(images) 
             loss = criterion(outputs, labels)
             # total test loss
-            test_loss = test_loss + loss.item() / NUM_BATCH_SIZE
-    test_loss_list.append(test_loss)
+            test_loss += loss.item()
+    test_loss_list.append(test_loss / NUM_SAMPLES)
+
+    # zero losses
+    train_loss = test_loss = 0
 
 # training time
 time_elapsed = datetime.timedelta(seconds = time.time() - start)
